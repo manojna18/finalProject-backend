@@ -36,3 +36,11 @@ accountInfoRouter.post("/", async (req, res) => {
     errorResponse(err, res);
   }
 });
+
+// accountInfoRouter.put(`/:_id`, async (req, res) => {
+//   try{
+
+//   }
+// })
+
+export default accountInfoRouter;
