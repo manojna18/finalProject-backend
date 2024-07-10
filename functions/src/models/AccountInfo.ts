@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 interface BodyType {
   height: number;
   weight: number;
@@ -13,7 +15,7 @@ export interface Recipe {
 }
 
 export default interface AccountInfo {
-  _id?: string;
+  _id?: ObjectId;
   userId: string;
   bodyType: BodyType;
   totalDailyCalories: number;

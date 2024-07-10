@@ -1,6 +1,7 @@
 import express from "express";
 import { getClient } from "../db";
 import AccountInfo from "../models/AccountInfo";
+import { ObjectId } from "mongodb";
 
 const accountInfoRouter = express.Router();
 
@@ -9,14 +10,14 @@ const errorResponse = (error: any, res: any) => {
   res.status(500).json({ message: "Internal Server Error" });
 };
 
-accountInfoRouter.get("/", async (req, res) => {
+accountInfoRouter.get("/:id", async (req, res) => {
   try {
+    const _id: ObjectId = new ObjectId(req.params.id);
     const client = await getClient();
     const results = client
       .db()
       .collection<AccountInfo>("myRecipes")
-      .find()
-      .toArray();
+      .findOne({ _id: _id });
     res.status(200).json(results);
   } catch (err) {
     console.log(err);
@@ -37,10 +38,25 @@ accountInfoRouter.post("/", async (req, res) => {
   }
 });
 
-// accountInfoRouter.put(`/:_id`, async (req, res) => {
-//   try{
+accountInfoRouter.put(`/:id`, async (req, res) => {
+  try {
+    const _id: ObjectId = new ObjectId(req.params.id);
+    const account: AccountInfo = req.body;
+    delete account._id;
 
-//   }
-// })
+    // const index: number = account
+    const client = await getClient();
+    await client
+      .db()
+      .collection<AccountInfo>("myRecipes")
+      .replaceOne({ _id: _id }, account);
+
+    account._id = new ObjectId(_id);
+
+    res.status(200).json(account);
+  } catch (err) {
+    errorResponse(err, res);
+  }
+});
 
 export default accountInfoRouter;
