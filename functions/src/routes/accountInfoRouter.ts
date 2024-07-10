@@ -12,12 +12,14 @@ const errorResponse = (error: any, res: any) => {
 
 accountInfoRouter.get("/:id", async (req, res) => {
   try {
-    const _id: ObjectId = new ObjectId(req.params.id);
+    const uid: string = req.params.id;
+    console.log(uid);
     const client = await getClient();
-    const results = client
+    const results = await client
       .db()
       .collection<AccountInfo>("myRecipes")
-      .findOne({ _id: _id });
+      .findOne({ userId: uid });
+    console.log(results);
     res.status(200).json(results);
   } catch (err) {
     console.log(err);
