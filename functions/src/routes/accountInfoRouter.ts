@@ -48,12 +48,14 @@ accountInfoRouter.put(`/:id`, async (req, res) => {
 
     // const index: number = account
     const client = await getClient();
-    await client
+    const result = await client
       .db()
       .collection<AccountInfo>("myRecipes")
       .replaceOne({ _id: _id }, account);
 
     account._id = new ObjectId(_id);
+
+    console.log(result);
 
     res.status(200).json(account);
   } catch (err) {
