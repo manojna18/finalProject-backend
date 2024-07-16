@@ -19,7 +19,18 @@ exports.scheduledFunctionCrontab = functions.pubsub
       client
         .db()
         .collection<AccountInfo>("myRecipes")
-        .updateMany({}, { $set: { meals: [] } });
+        .updateMany(
+          {},
+          {
+            $set: {
+              meals: [],
+              totalDailyCalories: 0,
+              totalDailyCarbs: 0,
+              totalDailyFats: 0,
+              totalDailyProtein: 0,
+            },
+          }
+        );
     } catch (error) {
       console.log(error, "internal server error");
     }
