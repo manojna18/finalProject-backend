@@ -16,21 +16,34 @@ exports.scheduledFunctionCrontab = functions.pubsub
   .onRun(async () => {
     try {
       const client = await getClient();
-      client
-        .db()
-        .collection<AccountInfo>("myRecipes")
-        .updateMany(
-          {},
-          {
-            $set: {
-              meals: [],
-              totalDailyCalories: 0,
-              totalDailyCarbs: 0,
-              totalDailyFats: 0,
-              totalDailyProtein: 0,
-            },
-          }
-        );
+      const accounts = client.db().collection<AccountInfo>("myRecipes").find()
+      accounts.forEach((account) => {
+        let d = new Date()
+        let meals = [...account.meals.slice(0,6), {date: d.toLocaleDateString(), recipes: []}]
+        client.db().collection<AccountInfo>("myRecipes").updateOne({userId: account.userId}, {
+          $set: {
+            meals: meals,
+            totalDailyCalories: 0,
+            totalDailyCarbs: 0,
+            totalDailyFats: 0,
+            totalDailyProtein: 0,
+        },})
+      })
+      // client
+      //   .db()
+      //   .collection<AccountInfo>("myRecipes")
+      //   .updateMany(
+      //     {},
+      //     {
+      //       $set: {
+      //         meals: [],
+      //         totalDailyCalories: 0,
+      //         totalDailyCarbs: 0,
+      //         totalDailyFats: 0,
+      //         totalDailyProtein: 0,
+      //       },
+      //     }
+      //   );
     } catch (error) {
       console.log(error, "internal server error");
     }

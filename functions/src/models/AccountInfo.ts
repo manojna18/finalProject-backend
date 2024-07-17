@@ -6,6 +6,7 @@ interface BodyType {
   heightSmallerUnit: number;
   age: number;
   sex: string;
+  isImperial: boolean;
 }
 
 export interface Recipe {
@@ -13,6 +14,15 @@ export interface Recipe {
   title: string;
   image: string;
   imageType: string;
+}
+
+export interface Day {
+  date: string;
+  recipes: Recipe[];
+  totalDailyCalories?: number;
+  totalDailyProtein?: number;
+  totalDailyCarbs?: number;
+  totalDailyFats?: number;
 }
 
 export default interface AccountInfo {
@@ -25,7 +35,7 @@ export default interface AccountInfo {
   totalDailyFats: number;
   favorites: Recipe[];
   calorieGoal: number;
-  meals: Recipe[];
+  meals: Day[];
   // addMacros(
   //   calories: number,
   //   protein: number,
