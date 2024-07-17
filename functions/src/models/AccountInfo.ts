@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 interface BodyType {
   height: number;
   weight: number;
+  heightSmallerUnit: number;
   age: number;
   sex: string;
 }
